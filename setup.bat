@@ -6,12 +6,12 @@ setlocal enabledelayedexpansion
 
 set "SCRIPT_DIR=%~dp0"
 set "LIB_DIR=%SCRIPT_DIR%lib"
-set "TARGET=%LIB_DIR%\compromise.min.js"
+set "TARGET=%LIB_DIR%\compromise.js"
 
 :: Pin to a specific version and verify SHA-256 after download.
 :: If unpkg serves a different/tampered file the script will refuse to proceed.
 :: To update: change the version, download manually, compute hash with CertUtil, update below.
-set "CDN_URL=https://unpkg.com/compromise@14.14.3/builds/compromise.min.js"
+set "CDN_URL=https://unpkg.com/compromise@14.14.5/builds/compromise.js"
 set "EXPECTED_SHA256=dca74c6f346638b8d4dd691efaf5461f97abfb3a95831522fabeb7ff7c1c058a"
 
 echo.

@@ -6,12 +6,12 @@ set -e
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 LIB_DIR="$SCRIPT_DIR/lib"
-TARGET="$LIB_DIR/compromise.min.js"
+TARGET="$LIB_DIR/compromise.js"
 
 # Pin to a specific version and verify its SHA-256 after download.
 # If unpkg ever serves a different/tampered file, the script will refuse to proceed.
 # To update: change the version, download manually, run `shasum -a 256` on it, update hash.
-CDN_URL="https://unpkg.com/compromise@14.14.3/builds/compromise.min.js"
+CDN_URL="https://unpkg.com/compromise@14.14.5/builds/compromise.js"
 EXPECTED_SHA256="dca74c6f346638b8d4dd691efaf5461f97abfb3a95831522fabeb7ff7c1c058a"
 
 echo ""

@@ -45,8 +45,8 @@ The extension uses [compromise.js](https://github.com/spencermountain/compromise
 detecting person names. It is not bundled in the repo due to file size.
 
 1. Go to the [compromise releases page](https://github.com/spencermountain/compromise/releases)
-2. Download `compromise.min.js` from the latest release
-3. Place it at `lib/compromise.min.js` inside the cloned folder
+2. Download `compromise.js` from the latest release
+3. Place it at `lib/compromise.js` inside the cloned folder
 
 > Without this file the extension still works fully — regex patterns, CSS selectors,
 > and custom word lists remain active. Only NLP-based name detection is disabled.
@@ -137,7 +137,7 @@ demo-shield/
 │   ├── redactor.js         # DOM redaction logic
 │   └── observer.js         # MutationObserver wrapper
 ├── lib/
-│   └── compromise.min.js   # NLP library (add manually)
+│   └── compromise.js   # NLP library (add manually)
 ├── config/
 │   └── default-rules.json
 └── icons/
