@@ -16,7 +16,7 @@ Use the Terminal one-liner below instead (one copy-paste, no technical knowledge
 3. Paste this command and press `Enter` — replace the path if you unzipped somewhere other than Downloads:
 
 ```bash
-bash ~/Downloads/pii-browser-anon-plugin-main/setup.command
+bash ~/Downloads/pii-browser-anon-plugin-main/setup.sh
 ```
 
 > **Tip:** Not sure of the path? Drag the unzipped folder into the Terminal window after typing `bash ` — it will fill in the correct path automatically.
