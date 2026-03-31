@@ -4,6 +4,17 @@ Real-time PII redaction Chrome extension for live product demos.
 
 ## Installation
 
+### Quick setup (recommended for non-technical users)
+
+1. Download this repository as a ZIP — click **Code → Download ZIP** on GitHub, then unzip it
+2. **macOS / Linux:** double-click `setup.sh` (or run `bash setup.sh` in Terminal)
+   **Windows:** double-click `setup.bat`
+3. Follow the on-screen instructions — the script downloads the NLP library and opens Chrome to the right page
+
+---
+
+### Manual setup
+
 ### Prerequisites
 
 - Google Chrome (version 88+) or any Chromium-based browser (Edge, Brave, Arc)
