@@ -1,0 +1,449 @@
+/* ─── Reset & Base ─────────────────────────────────────────────────────────── */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #ffffff;
+  --surface: #f8f9fa;
+  --border: #e0e0e0;
+  --text: #1f2328;
+  --text-secondary: #57606a;
+  --accent: #1a56db;
+  --accent-light: #e8f0fe;
+  --danger: #d93025;
+  --success: #1e8e3e;
+  --warning-bg: #fff8e1;
+  --warning-border: #ffc107;
+  --radius: 6px;
+  --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+}
+
+body {
+  font-family: var(--font);
+  font-size: 13px;
+  color: var(--text);
+  background: var(--bg);
+  width: 300px;
+  min-width: 300px;
+  max-width: 300px;
+  line-height: 1.4;
+  overflow-x: hidden;
+}
+
+/* ─── Header ────────────────────────────────────────────────────────────────── */
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px 10px;
+  background: var(--text);
+  color: #fff;
+}
+
+.header-title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.shield-icon {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.title-text {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+}
+
+/* Toggle switch */
+.toggle-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.toggle {
+  position: relative;
+  display: inline-block;
+  width: 38px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.toggle-slider {
+  position: absolute;
+  inset: 0;
+  background: #555;
+  border-radius: 20px;
+  transition: background 0.2s;
+}
+
+.toggle-slider::before {
+  content: '';
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  left: 3px;
+  top: 3px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.2s;
+}
+
+.toggle input:checked + .toggle-slider {
+  background: var(--success);
+}
+
+.toggle input:checked + .toggle-slider::before {
+  transform: translateX(18px);
+}
+
+.toggle-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: rgba(255,255,255,0.8);
+  min-width: 22px;
+}
+
+/* ─── Sections ──────────────────────────────────────────────────────────────── */
+
+.section {
+  padding: 10px 14px;
+}
+
+.section-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--text-secondary);
+  margin-bottom: 7px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 7px;
+}
+
+.section-header .section-label {
+  margin-bottom: 0;
+  flex: 1;
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 0;
+}
+
+/* ─── Mode Selector ─────────────────────────────────────────────────────────── */
+
+.mode-group {
+  display: flex;
+  gap: 6px;
+}
+
+.mode-option {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 7px 4px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--text-secondary);
+  transition: border-color 0.15s, background 0.15s;
+  user-select: none;
+}
+
+.mode-option input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.mode-option:has(input:checked) {
+  border-color: var(--accent);
+  background: var(--accent-light);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.mode-swatch {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 18px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.blackout-swatch {
+  background: #1a1a1a;
+  color: #1a1a1a;
+  border: 1px solid #000;
+}
+
+.replace-swatch {
+  background: #fff8e1;
+  color: #856404;
+  border: 1px solid var(--warning-border);
+  font-style: italic;
+}
+
+.blur-swatch {
+  background: var(--surface);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  filter: blur(2px);
+}
+
+/* ─── Detection Checkboxes ──────────────────────────────────────────────────── */
+
+.checkbox-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px 8px;
+}
+
+.check-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  padding: 2px 0;
+  font-size: 12px;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.check-item input[type="checkbox"] {
+  width: 13px;
+  height: 13px;
+  accent-color: var(--accent);
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+/* ─── Custom Words ──────────────────────────────────────────────────────────── */
+
+.word-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  min-height: 10px;
+}
+
+.word-chip {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 1px 8px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.word-chip-more {
+  font-style: italic;
+  color: var(--accent);
+  border-color: var(--accent-light);
+  background: var(--accent-light);
+}
+
+/* ─── Textarea editor ───────────────────────────────────────────────────────── */
+
+textarea {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 7px 9px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text);
+  background: var(--surface);
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+textarea:focus {
+  border-color: var(--accent);
+  background: #fff;
+}
+
+.editor-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.hint-text {
+  margin-top: 5px;
+  font-size: 10px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.hint-text code {
+  font-family: var(--mono);
+  font-size: 10px;
+  background: var(--surface);
+  padding: 1px 3px;
+  border-radius: 3px;
+}
+
+/* ─── Profiles ──────────────────────────────────────────────────────────────── */
+
+.profile-row {
+  margin-bottom: 6px;
+}
+
+.profile-row select {
+  width: 100%;
+  padding: 5px 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 12px;
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  outline: none;
+}
+
+.profile-row select:focus {
+  border-color: var(--accent);
+}
+
+.profile-actions {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+/* ─── Buttons ───────────────────────────────────────────────────────────────── */
+
+.btn {
+  padding: 4px 10px;
+  border-radius: var(--radius);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+.btn-primary:hover {
+  background: #1248c2;
+}
+
+.btn-secondary {
+  background: var(--surface);
+  color: var(--text);
+  border-color: var(--border);
+}
+
+.btn-secondary:hover {
+  background: #e8eaed;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  border-color: transparent;
+}
+
+.btn-ghost:hover {
+  background: var(--surface);
+}
+
+.link-btn {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-size: 12px;
+  cursor: pointer;
+  padding: 0;
+  font-weight: 500;
+}
+
+.link-btn:hover {
+  text-decoration: underline;
+}
+
+.badge-advanced {
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1px 5px;
+  color: var(--text-secondary);
+}
+
+/* ─── Footer ────────────────────────────────────────────────────────────────── */
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 7px 14px;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.stat-count {
+  font-weight: 600;
+  color: var(--danger);
+}
+
+.shortcuts-hint {
+  font-size: 10px;
+  color: #aaa;
+}
+
+/* ─── Utilities ─────────────────────────────────────────────────────────────── */
+
+.hidden {
+  display: none !important;
+}

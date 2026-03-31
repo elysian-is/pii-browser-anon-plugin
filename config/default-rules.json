@@ -1,0 +1,161 @@
+{
+  "version": "1.0.0",
+
+  "regexPatterns": [
+    {
+      "id": "ssn",
+      "label": "SSN / Tax ID",
+      "category": "ssn",
+      "pattern": "\\b\\d{3}-\\d{2}-\\d{4}\\b",
+      "flags": "g"
+    },
+    {
+      "id": "fein",
+      "label": "FEIN / Tax ID (XX-XXXXXXX)",
+      "category": "ssn",
+      "pattern": "\\b\\d{2}-\\d{7}\\b",
+      "flags": "g"
+    },
+    {
+      "id": "phone_us",
+      "label": "Phone Number (US)",
+      "category": "phone",
+      "pattern": "\\b\\(?\\d{3}\\)?[-.\\ ]?\\d{3}[-.\\ ]?\\d{4}\\b",
+      "flags": "g"
+    },
+    {
+      "id": "email",
+      "label": "Email Address",
+      "category": "email",
+      "pattern": "\\b[A-Za-z0-9._%+\\-]+@[A-Za-z0-9.\\-]+\\.[A-Za-z]{2,}\\b",
+      "flags": "gi"
+    },
+    {
+      "id": "currency",
+      "label": "Dollar Amount",
+      "category": "currency",
+      "pattern": "\\$\\s?[\\d,]+\\.?\\d{0,2}\\b",
+      "flags": "g"
+    },
+    {
+      "id": "date_us",
+      "label": "Date (US format)",
+      "category": "dates",
+      "pattern": "\\b\\d{1,2}\\/\\d{1,2}\\/\\d{2,4}\\b",
+      "flags": "g"
+    },
+    {
+      "id": "date_iso",
+      "label": "Date (ISO format)",
+      "category": "dates",
+      "pattern": "\\b\\d{4}-\\d{2}-\\d{2}\\b",
+      "flags": "g"
+    },
+    {
+      "id": "claim_number",
+      "label": "Claim Number",
+      "category": "claimNumbers",
+      "pattern": "\\b[A-Z]{2,4}-?\\d{6,12}\\b",
+      "flags": "g"
+    },
+    {
+      "id": "policy_number",
+      "label": "Policy Number",
+      "category": "claimNumbers",
+      "pattern": "\\b[A-Z]{2,5}\\d{6,10}\\b",
+      "flags": "g"
+    },
+    {
+      "id": "zip_code",
+      "label": "ZIP Code",
+      "category": "addresses",
+      "pattern": "\\b\\d{5}(-\\d{4})?\\b",
+      "flags": "g"
+    },
+    {
+      "id": "street_address",
+      "label": "Street Address",
+      "category": "addresses",
+      "pattern": "\\b\\d{1,5}\\s[A-Z][a-z]+\\s(St|Ave|Blvd|Dr|Rd|Ln|Way|Ct|Pl|Ter|Circle|Cir)\\.?\\b",
+      "flags": "gi"
+    },
+    {
+      "id": "icd10",
+      "label": "ICD-10 Medical Code",
+      "category": "medicalCodes",
+      "pattern": "\\b[A-Z]\\d{2,3}\\.?\\d{0,4}\\b",
+      "flags": "g"
+    }
+  ],
+
+  "selectorRules": [
+    { "selector": "[data-field='claimant_name']", "type": "name", "platforms": ["conductor", "all"] },
+    { "selector": "[data-field='insured_name']", "type": "name", "platforms": ["conductor", "all"] },
+    { "selector": "[data-field='adjuster']", "type": "name", "platforms": ["conductor", "all"] },
+    { "selector": "[data-field='attorney']", "type": "name", "platforms": ["conductor", "all"] },
+    { "selector": "[data-field='provider']", "type": "name", "platforms": ["conductor", "all"] },
+    { "selector": "[data-field='ssn']", "type": "ssn", "platforms": ["conductor", "all"] },
+    { "selector": "[data-field='policy_number']", "type": "id", "platforms": ["conductor", "all"] },
+    { "selector": "[data-field='claim_number']", "type": "id", "platforms": ["conductor", "all"] },
+    { "selector": "[data-field='phone']", "type": "phone", "platforms": ["conductor", "all"] },
+    { "selector": "[data-field='email']", "type": "email", "platforms": ["conductor", "all"] },
+    { "selector": "[data-field='address']", "type": "address", "platforms": ["conductor", "all"] },
+    { "selector": ".adjuster-name", "type": "name", "platforms": ["conductor", "all"] },
+    { "selector": ".policy-number", "type": "id", "platforms": ["conductor", "all"] },
+    { "selector": ".reserve-amount", "type": "currency", "platforms": ["conductor", "all"] },
+    { "selector": ".payment-amount", "type": "currency", "platforms": ["conductor", "all"] },
+    { "selector": ".settlement-value", "type": "currency", "platforms": ["conductor", "all"] }
+  ],
+
+  "replacements": {
+    "names": [
+      "Alex Johnson", "Sam Williams", "Jordan Lee",
+      "Taylor Brown", "Morgan Davis", "Casey Miller",
+      "Riley Wilson", "Drew Thompson", "Avery Martinez"
+    ],
+    "companies": [
+      "Acme Corp", "Globex Inc", "Initech LLC",
+      "Umbrella Co", "Stark Industries", "Wayne Enterprises"
+    ],
+    "addresses": [
+      "123 Main St, Anytown, ST 00000",
+      "456 Oak Ave, Springfield, ST 11111",
+      "789 Pine Rd, Riverside, ST 22222"
+    ],
+    "emails": [
+      "demo@example.com",
+      "user@example.com",
+      "contact@example.com"
+    ],
+    "phones": [
+      "(555) 000-0001",
+      "(555) 000-0002",
+      "(555) 000-0003"
+    ]
+  },
+
+  "defaultConfig": {
+    "enabled": false,
+    "mode": "blackout",
+    "hoverReveal": false,
+    "detection": {
+      "names": true,
+      "ssn": true,
+      "phone": true,
+      "email": true,
+      "currency": true,
+      "dates": true,
+      "addresses": true,
+      "claimNumbers": true,
+      "medicalCodes": true,
+      "customWords": true
+    },
+    "customWords": [],
+    "selectorRules": [],
+    "profiles": {},
+    "stats": {
+      "totalRedacted": 0,
+      "lastUsed": null
+    }
+  }
+}

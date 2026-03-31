@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Demo Shield</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+
+  <!-- ── Header ── -->
+  <header class="header">
+    <div class="header-title">
+      <span class="shield-icon" aria-hidden="true">🛡️</span>
+      <span class="title-text">Demo Shield</span>
+    </div>
+    <div class="toggle-wrap">
+      <label class="toggle" aria-label="Enable redaction">
+        <input type="checkbox" id="master-toggle" />
+        <span class="toggle-slider"></span>
+      </label>
+      <span class="toggle-label" id="toggle-label">OFF</span>
+    </div>
+  </header>
+
+  <!-- ── Mode ── -->
+  <section class="section">
+    <div class="section-label">Redaction Mode</div>
+    <div class="mode-group" role="radiogroup" aria-label="Redaction mode">
+      <label class="mode-option">
+        <input type="radio" name="mode" value="blackout" />
+        <span class="mode-swatch blackout-swatch"></span>
+        Blackout
+      </label>
+      <label class="mode-option">
+        <input type="radio" name="mode" value="replace" />
+        <span class="mode-swatch replace-swatch">Abc</span>
+        Replace
+      </label>
+      <label class="mode-option">
+        <input type="radio" name="mode" value="blur" />
+        <span class="mode-swatch blur-swatch">···</span>
+        Blur
+      </label>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- ── Detection ── -->
+  <section class="section">
+    <div class="section-label">Detection</div>
+    <div class="checkbox-grid">
+      <label class="check-item"><input type="checkbox" data-detection="names" />    Names (NLP)</label>
+      <label class="check-item"><input type="checkbox" data-detection="ssn" />      SSN / Tax ID</label>
+      <label class="check-item"><input type="checkbox" data-detection="phone" />    Phone Numbers</label>
+      <label class="check-item"><input type="checkbox" data-detection="email" />    Email Addresses</label>
+      <label class="check-item"><input type="checkbox" data-detection="currency" /> Dollar Amounts</label>
+      <label class="check-item"><input type="checkbox" data-detection="dates" />    Dates</label>
+      <label class="check-item"><input type="checkbox" data-detection="addresses" />Addresses</label>
+      <label class="check-item"><input type="checkbox" data-detection="claimNumbers" />Claim / Policy #</label>
+      <label class="check-item"><input type="checkbox" data-detection="medicalCodes" />Medical Codes</label>
+      <label class="check-item"><input type="checkbox" data-detection="customWords" />Custom Word List</label>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- ── Custom Words ── -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-label">Custom Words</span>
+      <button class="link-btn" id="toggle-custom-words">Edit</button>
+    </div>
+    <div id="custom-words-preview" class="word-preview"></div>
+    <div id="custom-words-editor" class="hidden">
+      <textarea
+        id="custom-words-input"
+        placeholder="One term per line&#10;e.g. Acme Insurance&#10;Dr. Richardson"
+        rows="5"
+        spellcheck="false"
+      ></textarea>
+      <div class="editor-actions">
+        <button class="btn btn-primary" id="save-custom-words">Save</button>
+        <button class="btn btn-ghost" id="cancel-custom-words">Cancel</button>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- ── Profiles ── -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-label">Profile</span>
+    </div>
+    <div class="profile-row">
+      <select id="profile-select" aria-label="Select profile">
+        <option value="__current__">Demo Default</option>
+      </select>
+    </div>
+    <div class="profile-actions">
+      <button class="btn btn-secondary" id="save-profile">Save As…</button>
+      <button class="btn btn-secondary" id="export-profile">Export</button>
+      <button class="btn btn-secondary" id="import-profile">Import</button>
+      <input type="file" id="import-file-input" accept=".json" class="hidden" />
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- ── Advanced: Selector Rules ── -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-label">Conductor Selectors</span>
+      <button class="link-btn" id="toggle-selectors">Edit</button>
+      <span class="badge-advanced">Advanced</span>
+    </div>
+    <div id="selector-editor" class="hidden">
+      <textarea
+        id="selector-input"
+        placeholder='[{"selector":".my-field","type":"name"}]'
+        rows="6"
+        spellcheck="false"
+      ></textarea>
+      <div class="editor-actions">
+        <button class="btn btn-primary" id="save-selectors">Save</button>
+        <button class="btn btn-ghost" id="cancel-selectors">Cancel</button>
+      </div>
+      <p class="hint-text">JSON array of <code>{"selector":"…","type":"…"}</code> objects.</p>
+    </div>
+  </section>
+
+  <!-- ── Footer ── -->
+  <footer class="footer">
+    <span class="stat-count" id="stat-count"></span>
+    <span class="shortcuts-hint">Alt+Shift+D to toggle</span>
+  </footer>
+
+  <script src="popup.js"></script>
+</body>
+</html>

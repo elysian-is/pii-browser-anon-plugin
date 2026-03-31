@@ -1,0 +1,44 @@
+{
+  "manifest_version": 3,
+  "name": "Demo Shield",
+  "version": "1.0.0",
+  "description": "Real-time PII redaction for live product demos",
+  "icons": {
+    "16": "icons/icon-16.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": "icons/icon-48.png"
+  },
+  "background": {
+    "service_worker": "background/service-worker.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": [
+        "lib/compromise.min.js",
+        "content/detector.js",
+        "content/redactor.js",
+        "content/observer.js",
+        "content/content.js"
+      ],
+      "run_at": "document_idle",
+      "all_frames": true
+    }
+  ],
+  "permissions": ["activeTab", "storage"],
+  "host_permissions": ["<all_urls>"],
+  "commands": {
+    "toggle-redaction": {
+      "suggested_key": { "default": "Alt+Shift+D" },
+      "description": "Toggle Demo Shield on/off"
+    },
+    "cycle-mode": {
+      "suggested_key": { "default": "Alt+Shift+M" },
+      "description": "Cycle redaction mode"
+    }
+  }
+}
