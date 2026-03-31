@@ -2,17 +2,56 @@
 
 Real-time PII redaction Chrome extension for live product demos.
 
-## Installation (Developer Mode)
+## Installation
 
-1. Open `chrome://extensions/` in Chrome
-2. Enable **Developer mode** (top-right toggle)
-3. Click **Load unpacked** and select this directory
-4. The Demo Shield icon will appear in the Chrome toolbar
+### Prerequisites
 
-> **Note:** The extension requires `lib/compromise.min.js` for NLP name detection.
-> Download it from the [compromise releases page](https://github.com/spencermountain/compromise/releases)
-> and place it at `lib/compromise.min.js`. Without it the extension still works —
-> regex and custom-word detection remain fully functional.
+- Google Chrome (version 88+) or any Chromium-based browser (Edge, Brave, Arc)
+- Git (to clone the repo)
+
+### Step 1 — Clone the repository
+
+```bash
+git clone https://github.com/elysian-is/pii-browser-anon-plugin.git
+cd pii-browser-anon-plugin
+```
+
+### Step 2 — (Optional) Add NLP name detection
+
+The extension uses [compromise.js](https://github.com/spencermountain/compromise) for
+detecting person names. It is not bundled in the repo due to file size.
+
+1. Go to the [compromise releases page](https://github.com/spencermountain/compromise/releases)
+2. Download `compromise.min.js` from the latest release
+3. Place it at `lib/compromise.min.js` inside the cloned folder
+
+> Without this file the extension still works fully — regex patterns, CSS selectors,
+> and custom word lists remain active. Only NLP-based name detection is disabled.
+
+### Step 3 — Load in Chrome
+
+1. Open **`chrome://extensions/`** in Chrome
+2. Enable **Developer mode** using the toggle in the top-right corner
+3. Click **Load unpacked**
+4. Select the `pii-browser-anon-plugin` folder you cloned in Step 1
+5. The **Demo Shield** icon will appear in the Chrome toolbar
+
+> To pin it for easy access: click the puzzle-piece (Extensions) icon in the toolbar
+> and pin Demo Shield.
+
+### Step 4 — Verify it works
+
+1. Navigate to any page with visible text (e.g. a claims record in Conductor)
+2. Click the Demo Shield icon → flip the toggle to **ON**
+3. PII fields should be redacted immediately
+
+### Updating the extension
+
+```bash
+git pull origin main
+```
+
+Then go to `chrome://extensions/` and click the **refresh** icon on the Demo Shield card.
 
 ## Usage
 
