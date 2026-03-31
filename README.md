@@ -6,10 +6,22 @@ Real-time PII redaction Chrome extension for live product demos.
 
 ### Quick setup (recommended for non-technical users)
 
+**Windows** — double-click `setup.bat`, then follow the on-screen instructions.
+
+**macOS** — macOS will block double-clicking scripts downloaded from the internet.
+Use the Terminal one-liner below instead (one copy-paste, no technical knowledge needed):
+
 1. Download this repository as a ZIP — click **Code → Download ZIP** on GitHub, then unzip it
-2. **macOS / Linux:** double-click `setup.command`
-   **Windows:** double-click `setup.bat`
-3. Follow the on-screen instructions — the script downloads the NLP library and opens Chrome to the right page
+2. Open **Terminal**: press `Cmd + Space`, type `Terminal`, press `Enter`
+3. Paste this command and press `Enter` — replace the path if you unzipped somewhere other than Downloads:
+
+```bash
+bash ~/Downloads/pii-browser-anon-plugin-main/setup.command
+```
+
+> **Tip:** Not sure of the path? Drag the unzipped folder into the Terminal window after typing `bash ` — it will fill in the correct path automatically.
+
+4. Follow the on-screen instructions — the script downloads the NLP library and opens Chrome to the right page
 
 ---
 
