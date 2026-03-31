@@ -233,14 +233,15 @@ function bindEvents() {
     const reader = new FileReader();
     reader.onload = async e => {
       try {
-        const imported = JSON.parse(e.target.result);
+        const raw = JSON.parse(e.target.result);
+        const validated = validateImportedConfig(raw);
         const profiles = config.profiles || {};
-        config = { ...imported, profiles };
+        config = { ...validated, profiles };
         renderAll();
         await saveConfig();
         if (config.enabled) sendToContent({ type: 'forceRescan' });
-      } catch {
-        alert('Invalid profile file. Expected JSON.');
+      } catch (err) {
+        alert('Invalid profile file: ' + err.message);
       }
     };
     reader.readAsText(file);
@@ -263,7 +264,7 @@ function bindEvents() {
   saveSelectorsBtn.addEventListener('click', async () => {
     try {
       const rules = JSON.parse(selectorInput.value);
-      if (!Array.isArray(rules)) throw new Error('Must be an array');
+      validateSelectorRules(rules);
       config.selectorRules = rules;
       await saveConfig();
       selectorEditor.classList.add('hidden');
@@ -325,4 +326,97 @@ function getDefaultConfig() {
     profiles: {},
     stats: { totalRedacted: 0, lastUsed: null },
   };
+}
+
+// ─── Config validation ────────────────────────────────────────────────────────
+
+const VALID_MODES = new Set(['blackout', 'replace', 'blur']);
+const VALID_DETECTION_KEYS = new Set([
+  'names', 'ssn', 'phone', 'email', 'currency',
+  'dates', 'addresses', 'claimNumbers', 'medicalCodes', 'customWords',
+]);
+const VALID_SELECTOR_TYPES = new Set([
+  'name', 'ssn', 'id', 'phone', 'email', 'address', 'currency',
+  'claimNumbers', 'medicalCodes', 'customWord',
+]);
+
+/**
+ * Validate and sanitize an imported config object.
+ * Returns a clean config merged over the current defaults, or throws if the
+ * object is structurally invalid.
+ */
+function validateImportedConfig(raw) {
+  if (typeof raw !== 'object' || raw === null || Array.isArray(raw)) {
+    throw new Error('Config must be a JSON object.');
+  }
+
+  const allowed = new Set([
+    'enabled', 'mode', 'hoverReveal', 'detection',
+    'customWords', 'selectorRules', 'profiles', 'stats',
+  ]);
+  for (const key of Object.keys(raw)) {
+    if (!allowed.has(key)) throw new Error(`Unexpected config key: "${key}"`);
+  }
+
+  if ('enabled' in raw && typeof raw.enabled !== 'boolean') {
+    throw new Error('"enabled" must be true or false.');
+  }
+  if ('mode' in raw && !VALID_MODES.has(raw.mode)) {
+    throw new Error(`"mode" must be one of: ${[...VALID_MODES].join(', ')}.`);
+  }
+  if ('hoverReveal' in raw && typeof raw.hoverReveal !== 'boolean') {
+    throw new Error('"hoverReveal" must be true or false.');
+  }
+
+  if ('detection' in raw) {
+    if (typeof raw.detection !== 'object' || raw.detection === null) {
+      throw new Error('"detection" must be an object.');
+    }
+    for (const [k, v] of Object.entries(raw.detection)) {
+      if (!VALID_DETECTION_KEYS.has(k)) throw new Error(`Unknown detection key: "${k}"`);
+      if (typeof v !== 'boolean') throw new Error(`detection["${k}"] must be true or false.`);
+    }
+  }
+
+  if ('customWords' in raw) {
+    if (!Array.isArray(raw.customWords)) throw new Error('"customWords" must be an array.');
+    for (const w of raw.customWords) {
+      if (typeof w !== 'string') throw new Error('Each custom word must be a string.');
+    }
+  }
+
+  if ('selectorRules' in raw) {
+    validateSelectorRules(raw.selectorRules);
+  }
+
+  return raw;
+}
+
+/**
+ * Validate an array of selector rules.
+ * Each rule must have a string "selector" and a whitelisted "type".
+ * The selector is also test-run against an empty div to catch invalid CSS.
+ */
+function validateSelectorRules(rules) {
+  if (!Array.isArray(rules)) throw new Error('Selector rules must be an array.');
+  const probe = document.createElement('div');
+  for (const rule of rules) {
+    if (typeof rule !== 'object' || rule === null) {
+      throw new Error('Each selector rule must be an object.');
+    }
+    if (typeof rule.selector !== 'string' || !rule.selector.trim()) {
+      throw new Error('Each selector rule must have a non-empty "selector" string.');
+    }
+    if (!VALID_SELECTOR_TYPES.has(rule.type)) {
+      throw new Error(
+        `Invalid selector rule type "${rule.type}". ` +
+        `Allowed: ${[...VALID_SELECTOR_TYPES].join(', ')}.`
+      );
+    }
+    try {
+      probe.querySelector(rule.selector);
+    } catch {
+      throw new Error(`Invalid CSS selector: "${rule.selector}"`);
+    }
+  }
 }

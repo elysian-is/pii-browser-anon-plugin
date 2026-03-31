@@ -66,6 +66,9 @@ chrome.runtime.onInstalled.addListener(async details => {
 // ─── Message Routing ──────────────────────────────────────────────────────────
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  // Reject messages from any context that isn't this extension.
+  if (sender.id !== chrome.runtime.id) return;
+
   switch (message.type) {
     case 'updateBadge':
       handleBadgeUpdate(message.count, sender.tab?.id);

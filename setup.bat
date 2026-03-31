@@ -7,7 +7,12 @@ setlocal enabledelayedexpansion
 set "SCRIPT_DIR=%~dp0"
 set "LIB_DIR=%SCRIPT_DIR%lib"
 set "TARGET=%LIB_DIR%\compromise.min.js"
-set "CDN_URL=https://unpkg.com/compromise/builds/compromise.min.js"
+
+:: Pin to a specific version and verify SHA-256 after download.
+:: If unpkg serves a different/tampered file the script will refuse to proceed.
+:: To update: change the version, download manually, compute hash with CertUtil, update below.
+set "CDN_URL=https://unpkg.com/compromise@14.14.3/builds/compromise.min.js"
+set "EXPECTED_SHA256=dca74c6f346638b8d4dd691efaf5461f97abfb3a95831522fabeb7ff7c1c058a"
 
 echo.
 echo  +------------------------------------------+
@@ -33,7 +38,20 @@ if exist "%TARGET%" (
     goto :end
   )
 
-  echo [OK]  NLP library downloaded.
+  echo [...]  Verifying file integrity...
+  for /f "tokens=*" %%H in ('powershell -NoProfile -Command "(Get-FileHash '%TARGET%' -Algorithm SHA256).Hash.ToLower()"') do set "ACTUAL_SHA256=%%H"
+
+  if /i not "%ACTUAL_SHA256%"=="%EXPECTED_SHA256%" (
+    del /f /q "%TARGET%" 2>nul
+    echo.
+    echo [ERROR] INTEGRITY CHECK FAILED
+    echo         Expected: %EXPECTED_SHA256%
+    echo         Got:      %ACTUAL_SHA256%
+    echo         The downloaded file has been removed. Do not proceed.
+    goto :end
+  )
+
+  echo [OK]  NLP library downloaded and verified.
 )
 
 :: ── Step 3: Open Chrome to the extensions page ────────────────────────────

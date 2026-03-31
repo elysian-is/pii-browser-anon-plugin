@@ -7,7 +7,12 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 LIB_DIR="$SCRIPT_DIR/lib"
 TARGET="$LIB_DIR/compromise.min.js"
-CDN_URL="https://unpkg.com/compromise/builds/compromise.min.js"
+
+# Pin to a specific version and verify its SHA-256 after download.
+# If unpkg ever serves a different/tampered file, the script will refuse to proceed.
+# To update: change the version, download manually, run `shasum -a 256` on it, update hash.
+CDN_URL="https://unpkg.com/compromise@14.14.3/builds/compromise.min.js"
+EXPECTED_SHA256="dca74c6f346638b8d4dd691efaf5461f97abfb3a95831522fabeb7ff7c1c058a"
 
 echo ""
 echo "╔══════════════════════════════════════════╗"
@@ -35,7 +40,29 @@ else
     exit 1
   fi
 
-  echo "✅  NLP library downloaded."
+  # Verify integrity before the file is used as an extension content script
+  echo "🔒  Verifying file integrity..."
+  if command -v shasum &>/dev/null; then
+    ACTUAL=$(shasum -a 256 "$TARGET" | awk '{print $1}')
+  elif command -v sha256sum &>/dev/null; then
+    ACTUAL=$(sha256sum "$TARGET" | awk '{print $1}')
+  else
+    echo "⚠️   WARNING: Cannot verify SHA-256 (no shasum/sha256sum found)."
+    echo "    Proceeding, but the file has not been integrity-checked."
+    ACTUAL="$EXPECTED_SHA256" # skip check
+  fi
+
+  if [ "$ACTUAL" != "$EXPECTED_SHA256" ]; then
+    rm -f "$TARGET"
+    echo ""
+    echo "❌  INTEGRITY CHECK FAILED"
+    echo "    Expected: $EXPECTED_SHA256"
+    echo "    Got:      $ACTUAL"
+    echo "    The downloaded file has been removed. Do not proceed."
+    exit 1
+  fi
+
+  echo "✅  NLP library downloaded and verified."
 fi
 
 # ── Step 3: Open Chrome to the extensions page ───────────────────────────────

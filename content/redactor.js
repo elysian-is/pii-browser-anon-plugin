@@ -81,6 +81,15 @@ function getReplacementText(type, original) {
   }
 }
 
+// ─── PII Storage (WeakMap, never in the DOM) ─────────────────────────────────
+//
+// Storing original PII in a data-ds-original DOM attribute would expose it to
+// any JavaScript running on the page (analytics tags, widgets, etc.).
+// A WeakMap keyed on the span element keeps the data in extension memory only.
+// Entries are automatically GC'd when their span is removed from the DOM.
+
+const _originalText = new WeakMap(); // span → original PII string
+
 // ─── CSS Injection ────────────────────────────────────────────────────────────
 
 const STYLES = `
@@ -243,7 +252,7 @@ class DemoShieldRedactor {
     const span = document.createElement('span');
     span.className = this._buildClassName();
     span.setAttribute('data-ds-redacted', type);
-    span.setAttribute('data-ds-original', original);
+    _originalText.set(span, original); // store PII in memory, not in the DOM
     span.textContent = displayText;
 
     // Clear element content and insert span
@@ -257,7 +266,7 @@ class DemoShieldRedactor {
     const span = document.createElement('span');
     span.className = this._buildClassName();
     span.setAttribute('data-ds-redacted', match.type);
-    span.setAttribute('data-ds-original', match.original);
+    _originalText.set(span, match.original); // store PII in memory, not in the DOM
 
     span.textContent = this.mode === 'replace'
       ? getReplacementText(match.type, match.original)
@@ -283,7 +292,7 @@ class DemoShieldRedactor {
     const spans = document.querySelectorAll('.ds-redacted');
     spans.forEach(span => {
       const type = span.getAttribute('data-ds-redacted') || 'customWord';
-      const original = span.getAttribute('data-ds-original') || span.textContent;
+      const original = _originalText.get(span) || span.textContent;
       span.className = this._buildClassName();
       span.textContent = mode === 'replace'
         ? getReplacementText(type, original)
@@ -297,8 +306,8 @@ class DemoShieldRedactor {
   removeAll() {
     const spans = document.querySelectorAll('[data-ds-redacted]');
     spans.forEach(span => {
-      const original = span.getAttribute('data-ds-original');
-      if (original !== null) {
+      const original = _originalText.get(span);
+      if (original !== undefined) {
         const textNode = document.createTextNode(original);
         if (span.parentNode) {
           span.parentNode.replaceChild(textNode, span);
@@ -333,9 +342,10 @@ class DemoShieldRedactor {
     // Replace redacted spans with their replacement/placeholder text
     container.querySelectorAll('[data-ds-redacted]').forEach(span => {
       const type = span.getAttribute('data-ds-redacted') || 'customWord';
-      const original = span.getAttribute('data-ds-original') || '';
-      const redacted = getReplacementText(type, original);
-      span.textContent = redacted;
+      // Cloned spans are not in the WeakMap, so we don't have the original PII
+      // here — which is fine. The clipboard just needs a safe placeholder, not
+      // the actual original. Pass '' so getReplacementText uses its defaults.
+      span.textContent = getReplacementText(type, '');
     });
 
     const redactedText = container.textContent;

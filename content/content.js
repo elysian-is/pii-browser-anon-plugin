@@ -109,7 +109,9 @@ try {
 
 // Listen for direct messages from background/popup
 try {
-  chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    // Reject messages from any context that isn't this extension.
+    if (sender.id !== chrome.runtime.id) return;
     safeRun(() => {
       switch (message.type) {
         case 'toggle':
